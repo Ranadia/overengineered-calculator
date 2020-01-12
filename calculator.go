@@ -1,25 +1,43 @@
 package main
 
-func plus(a int, b int) int {
+import "context"
+
+func plus(a float64, b float64) float64 {
 	result := a + b
-	postCalculation("plus", a, b, result)
+	var ctx context.Context
+
+	calc := Calculation{"plus", a, b, float64(result)}
+
+	postCalculation(ctx, calc)
 	return result
 }
 
-func minus(a int, b int) int {
+func minus(a float64, b float64) float64 {
 	result := a - b
-	postCalculation("minus", a, b, result)
+	var ctx context.Context
+
+	calc := Calculation{"minus", a, b, result}
+
+	postCalculation(ctx, calc)
 	return result
 }
 
-func multiply(a int, b int) int {
+func multiply(a float64, b float64) float64 {
 	result := a * b
-	postCalculation("multiply", a, b, result)
+	var ctx context.Context
+
+	calc := Calculation{"multiply", a, b, result}
+
+	postCalculation(ctx, calc)
 	return result
 }
 
-func divide(a int, b int) int {
+func divide(a float64, b float64) float64 {
 	result := a / b
-	postCalculation("divide", a, b, result)
+	var ctx context.Context
+
+	calc := Calculation{"divide", a, b, result}
+
+	postCalculation(ctx, calc)
 	return result
 }

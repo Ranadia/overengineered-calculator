@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	// googleCloudHandler "$GOPATHoverengineered-calculator/googleCloudHandler"
 )
 
 func main() {
