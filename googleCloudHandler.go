@@ -10,7 +10,6 @@ import (
 )
 
 var client *firestore.Client
-
 var projectID string
 
 func init() {
@@ -26,8 +25,6 @@ func init() {
 }
 
 func postCalculation(ctx context.Context, calc Calculation) {
-	// client, err := firestore.NewClient(ctx, projectID)
-
 	_, _, err := client.Collection(calc.typeOfCalculation).Add(ctx, map[string]interface{}{
 		"firstNumber":  calc.firstNumber,
 		"secondNUmber": calc.secondNumber,
@@ -41,8 +38,6 @@ func postCalculation(ctx context.Context, calc Calculation) {
 }
 
 func getCalculation(ctx context.Context, typeOfCalculation string) {
-	// client, err := firestore.NewClient(ctx, projectID)
-
 	iter := client.Collection(typeOfCalculation).Documents(ctx)
 	for {
 		calc, err := iter.Next()
