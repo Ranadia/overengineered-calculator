@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 )
 
 func main() {
@@ -21,4 +23,8 @@ func main() {
 	getCalculation(ctx, "plus")
 
 	closeClient()
+
+	s := &server{}
+	http.Handle("/", s)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
