@@ -1,10 +1,12 @@
 package main
 
-import "context"
+import (
+	"context"
+)
 
 func plus(a float64, b float64) float64 {
 	result := a + b
-	var ctx context.Context
+	ctx := context.Background()
 
 	calc := Calculation{"plus", a, b, float64(result)}
 
@@ -14,7 +16,7 @@ func plus(a float64, b float64) float64 {
 
 func minus(a float64, b float64) float64 {
 	result := a - b
-	var ctx context.Context
+	ctx := context.Background()
 
 	calc := Calculation{"minus", a, b, result}
 
@@ -24,7 +26,7 @@ func minus(a float64, b float64) float64 {
 
 func multiply(a float64, b float64) float64 {
 	result := a * b
-	var ctx context.Context
+	ctx := context.Background()
 
 	calc := Calculation{"multiply", a, b, result}
 
@@ -34,7 +36,7 @@ func multiply(a float64, b float64) float64 {
 
 func divide(a float64, b float64) float64 {
 	result := a / b
-	var ctx context.Context
+	ctx := context.Background()
 
 	calc := Calculation{"divide", a, b, result}
 
