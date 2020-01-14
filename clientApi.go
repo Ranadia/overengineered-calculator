@@ -18,34 +18,34 @@ func init() {
 	fmt.Println("HttpServer starting up.")
 }
 
-func retrieveAllCalculations(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(`{"message": "get called"}`))
-}
+// func retrieveAllCalculations(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
+// 	w.WriteHeader(http.StatusOK)
+// 	w.Write([]byte(`{"message": "get called"}`))
+// }
 
-func retrieveCalculationForType(w http.ResponseWriter, r *http.Request) {
-	pathParams := mux.Vars(r)
-	ctx := context.Background()
+// func retrieveCalculationForType(w http.ResponseWriter, r *http.Request) {
+// 	pathParams := mux.Vars(r)
+// 	ctx := context.Background()
 
-	typeOfCalculation := ""
-	var err error
-	if val, ok := pathParams["typeOfCalculation"]; ok {
-		typeOfCalculation = val
-		if err != nil {
-			fmt.Println("Need a typeOfCalculation of either plus, minus, multiply or divide")
-		}
-	}
+// 	typeOfCalculation := ""
+// 	var err error
+// 	if val, ok := pathParams["typeOfCalculation"]; ok {
+// 		typeOfCalculation = val
+// 		if err != nil {
+// 			fmt.Println("Need a typeOfCalculation of either plus, minus, multiply or divide")
+// 		}
+// 	}
 
-	if typeOfCalculation == "plus" || typeOfCalculation == "minus" || typeOfCalculation == "multiply" || typeOfCalculation == "divide" {
-		getCalculationsForType(ctx, typeOfCalculation)
-	} else {
-		fmt.Println("Type of calculation not recognised. Please use either \"plus, minus, multiply or divide\"")
-	}
+// 	if typeOfCalculation == "plus" || typeOfCalculation == "minus" || typeOfCalculation == "multiply" || typeOfCalculation == "divide" {
+// 		getCalculationsForType(ctx, typeOfCalculation)
+// 	} else {
+// 		fmt.Println("Type of calculation not recognised. Please use either \"plus, minus, multiply or divide\"")
+// 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-}
+// 	w.Header().Set("Content-Type", "application/json")
+// 	w.WriteHeader(http.StatusOK)
+// }
 
 func retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
@@ -120,8 +120,8 @@ func apiHandle() {
 
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1").Subrouter()
-	api.HandleFunc("/getAll", retrieveAllCalculations).Methods(http.MethodGet)
-	api.HandleFunc("/getCalculation/{typeOfCalculation}", retrieveCalculationForType).Methods(http.MethodGet)
+	// api.HandleFunc("/getAll", retrieveAllCalculations).Methods(http.MethodGet)
+	// api.HandleFunc("/getCalculation/{typeOfCalculation}", retrieveCalculationForType).Methods(http.MethodGet)
 
 	api.HandleFunc("/postCalculation", receiveCalculation).Methods(http.MethodPost)
 
