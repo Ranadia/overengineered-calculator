@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -64,6 +65,40 @@ func retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 
 func receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	ctx := context.Background()
+
+	fmt.Println("\nprinting r:")
+	fmt.Println(r)
+	fmt.Println("\n\n")
+
+	err := r.ParseForm()
+
+	fNumber, _ := strconv.ParseFloat(r.FormValue("firstNumber"), 64)
+	sNumber, _ := strconv.ParseFloat(r.FormValue("secondNumber"), 64)
+	rslt, _ := strconv.ParseFloat(r.FormValue("result"), 64)
+
+	fmt.Println("\nreceiveCalculation, printing r:")
+	fmt.Println("typeOfCalculation: ", r.FormValue("typeOfCalculation"))
+	fmt.Println("firstNumber: ", r.FormValue("firstNumber"))
+	fmt.Println("secondNumber: ", r.FormValue("secondNumber"))
+	fmt.Println("result: ", r.FormValue("result"))
+	fmt.Println("\n\n")
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error": "body not parsed"}`))
+		return
+	}
+
+	calc := Calculation{
+		typeOfCalculation: r.FormValue("typeOfCalculation"),
+		firstNumber:       fNumber,
+		secondNumber:      sNumber,
+		result:            rslt,
+	}
+
+	postCalculation(ctx, calc)
+
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(`{"message": "receiveCalculation test"}`))
 }

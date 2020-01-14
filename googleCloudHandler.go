@@ -9,8 +9,10 @@ import (
 	"google.golang.org/api/iterator"
 )
 
-var client *firestore.Client
-var projectID string
+var (
+	client    *firestore.Client
+	projectID string
+)
 
 func init() {
 	projectID = "overengineered-calculato-c695d"
