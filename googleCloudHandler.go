@@ -62,11 +62,9 @@ func getCalculationsForType(ctx context.Context, typeOfCalculation string) {
 
 		fmt.Println("printing calcData")
 		fmt.Println(calcData)
-		fmt.Println("\n")
 
 		fmt.Println("printing marshalled jsonData.")
 		fmt.Println(jsonData)
-		fmt.Println("\n\n")
 	}
 }
 

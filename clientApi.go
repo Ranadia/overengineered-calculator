@@ -66,11 +66,11 @@ func retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 
 func receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	ctx := context.Background()
 
-	body, _ := ioutil.ReadAll(r.Body) // check for errors
-
+	body, _ := ioutil.ReadAll(r.Body)
 	keyVal := make(map[string]string)
-	json.Unmarshal(body, &keyVal) // check for errors
+	json.Unmarshal(body, &keyVal)
 
 	typeOfCalculation := keyVal["typeOfCalculation"]
 	fNumber, _ := strconv.ParseFloat(keyVal["firstNumber"], 64)
@@ -91,6 +91,15 @@ func receiveCalculation(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"message": "Type of calculation is unsupported. Please use either \"plus, minus, multiply, divide\""}`))
 		return
 	}
+
+	calc := Calculation{
+		typeOfCalculation,
+		fNumber,
+		sNumber,
+		result,
+	}
+
+	postCalculation(ctx, calc)
 
 	data := map[string]interface{}{
 		"result": result,
