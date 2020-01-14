@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -65,42 +66,44 @@ func retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 
 func receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	ctx := context.Background()
 
-	fmt.Println("\nprinting r:")
-	fmt.Println(r)
-	fmt.Println("\n\n")
+	body, _ := ioutil.ReadAll(r.Body) // check for errors
 
-	err := r.ParseForm()
+	keyVal := make(map[string]string)
+	json.Unmarshal(body, &keyVal) // check for errors
 
-	fNumber, _ := strconv.ParseFloat(r.FormValue("firstNumber"), 64)
-	sNumber, _ := strconv.ParseFloat(r.FormValue("secondNumber"), 64)
-	rslt, _ := strconv.ParseFloat(r.FormValue("result"), 64)
+	typeOfCalculation := keyVal["typeOfCalculation"]
+	fNumber, _ := strconv.ParseFloat(keyVal["firstNumber"], 64)
+	sNumber, _ := strconv.ParseFloat(keyVal["secondNumber"], 64)
 
-	fmt.Println("\nreceiveCalculation, printing r:")
-	fmt.Println("typeOfCalculation: ", r.FormValue("typeOfCalculation"))
-	fmt.Println("firstNumber: ", r.FormValue("firstNumber"))
-	fmt.Println("secondNumber: ", r.FormValue("secondNumber"))
-	fmt.Println("result: ", r.FormValue("result"))
-	fmt.Println("\n\n")
+	var result float64
 
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"error": "body not parsed"}`))
+	switch typeOfCalculation {
+	case "plus":
+		result = plus(fNumber, sNumber)
+	case "minus":
+		result = minus(fNumber, sNumber)
+	case "multiply":
+		result = multiply(fNumber, sNumber)
+	case "divide":
+		result = divide(fNumber, sNumber)
+	default:
+		w.Write([]byte(`{"message": "Type of calculation is unsupported. Please use either \"plus, minus, multiply, divide\""}`))
 		return
 	}
 
-	calc := Calculation{
-		typeOfCalculation: r.FormValue("typeOfCalculation"),
-		firstNumber:       fNumber,
-		secondNumber:      sNumber,
-		result:            rslt,
+	data := map[string]interface{}{
+		"result": result,
+	}
+	jsonData, err := json.Marshal(data)
+
+	if err != nil {
+		w.Write([]byte(`{"message": "Error json.marshalling result."}`))
+		return
 	}
 
-	postCalculation(ctx, calc)
-
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "receiveCalculation test"}`))
+	w.Write([]byte(jsonData))
 }
 
 func apiHandle() {
@@ -110,6 +113,7 @@ func apiHandle() {
 	api := r.PathPrefix("/api/v1").Subrouter()
 	api.HandleFunc("/getAll", retrieveAllCalculations).Methods(http.MethodGet)
 	api.HandleFunc("/getCalculation/{typeOfCalculation}", retrieveCalculationForType).Methods(http.MethodGet)
+
 	api.HandleFunc("/postCalculation", receiveCalculation).Methods(http.MethodPost)
 
 	api.HandleFunc("/staticData", retrieveStaticData).Methods(http.MethodGet)
