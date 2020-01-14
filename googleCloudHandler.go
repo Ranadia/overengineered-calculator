@@ -37,8 +37,9 @@ func postCalculation(ctx context.Context, calc Calculation) {
 	}
 }
 
-func getCalculation(ctx context.Context, typeOfCalculation string) {
+func getCalculationsForType(ctx context.Context, typeOfCalculation string) {
 	iter := client.Collection(typeOfCalculation).Documents(ctx)
+
 	for {
 		calc, err := iter.Next()
 		if err == iterator.Done {
@@ -52,7 +53,7 @@ func getCalculation(ctx context.Context, typeOfCalculation string) {
 	}
 }
 
-func getStaticData(ctx context.Context) {
+func getStaticData(ctx context.Context) map[string]interface{} {
 	staticData, err := client.Collection("staticData").Doc("AppData").Get(ctx)
 
 	if err != nil {
@@ -61,7 +62,7 @@ func getStaticData(ctx context.Context) {
 
 	data := staticData.Data()
 
-	fmt.Println(data["Name"])
+	return data
 }
 
 func closeClient() {
