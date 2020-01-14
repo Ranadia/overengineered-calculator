@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -51,7 +52,21 @@ func getCalculationsForType(ctx context.Context, typeOfCalculation string) {
 			log.Fatalf("Failed to iterate: %v", err)
 		}
 
-		fmt.Println(calc.Data())
+		calcData := calc.Data()
+
+		jsonData, err := json.Marshal(calcData)
+
+		if err != nil {
+			fmt.Println("error json.marshalling data retrieved from firestore.")
+		}
+
+		fmt.Println("printing calcData")
+		fmt.Println(calcData)
+		fmt.Println("\n")
+
+		fmt.Println("printing marshalled jsonData.")
+		fmt.Println(jsonData)
+		fmt.Println("\n\n")
 	}
 }
 
