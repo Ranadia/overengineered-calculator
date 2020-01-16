@@ -1,18 +1,20 @@
 package main
 
-func plus(a float64, b float64) float64 {
+type Calculator struct{}
+
+func (c *Calculator) plus(a float64, b float64) float64 {
 	return a + b
 }
 
-func minus(a float64, b float64) float64 {
+func (c *Calculator) minus(a float64, b float64) float64 {
 	return a - b
 }
 
-func multiply(a float64, b float64) float64 {
+func (c *Calculator) multiply(a float64, b float64) float64 {
 	return a * b
 }
 
-// should handle divide by zero calculations.
-func divide(a float64, b float64) float64 {
+// TODO: Implement handling for dividing by zero
+func (c *Calculator) divide(a float64, b float64) float64 {
 	return a / b
 }

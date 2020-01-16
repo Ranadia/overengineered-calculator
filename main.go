@@ -1,7 +1,9 @@
 package main
 
-func main() {
-	apiHandle()
+var (
+	clientAPI *ClientAPI
+)
 
-	closeClient()
+func main() {
+	clientAPI.apiHandle()
 }
