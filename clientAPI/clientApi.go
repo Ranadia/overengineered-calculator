@@ -9,25 +9,29 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/Ranadia/overengineered-calculator/calculator/calculator"
+	"github.com/Ranadia/overengineered-calculator/googleCloudHandler/googlecloudhandler"
+	"github.com/Ranadia/overengineered-calculator/model/model"
 	"github.com/gorilla/mux"
 )
 
 type ClientAPI struct {
-	calculator *Calculator
-	gch        *googleCloudHandler
+	calculator         *calculator.Calculator
+	googleCloudHandler *googlecloudhandler.GoogleCloudHandler
+	calculation        model.Calculation
 }
 
 func init() {
 	fmt.Println("HttpServer starting up.")
 }
 
-func (ca ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
+func (ca *ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	data := ca.gch.GetStaticData(ctx)
+	data := ca.googleCloudHandler.GetStaticData(ctx)
 
 	jsonData, err := json.Marshal(data)
 
@@ -38,7 +42,7 @@ func (ca ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(jsonData))
 }
 
-func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
+func (ca *ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	ctx := context.Background()
 
@@ -66,14 +70,14 @@ func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	calc := Calculation{
+	calc := ca.calculation{
 		typeOfCalculation,
 		fNumber,
 		sNumber,
 		result,
 	}
 
-	ca.gch.PostCalculation(ctx, calc)
+	ca.googleCloudHandler.PostCalculation(ctx, calc)
 
 	data := map[string]interface{}{
 		"result": result,
@@ -89,13 +93,11 @@ func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(jsonData))
 }
 
-func (ca *ClientAPI) ApiHandle() {
+func (ca *ClientAPI) APIHandle() {
 	fmt.Println("apiHandle evoked.")
 
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1").Subrouter()
-	// api.HandleFunc("/getAll", retrieveAllCalculations).Methods(http.MethodGet)
-	// api.HandleFunc("/getCalculation/{typeOfCalculation}", retrieveCalculationForType).Methods(http.MethodGet)
 
 	api.HandleFunc("/postCalculation", ca.receiveCalculation).Methods(http.MethodPost)
 

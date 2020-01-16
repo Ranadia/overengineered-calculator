@@ -3,9 +3,9 @@ package googlecloudhandler
 import (
 	"context"
 	"fmt"
-	m "model"
 
 	"cloud.google.com/go/firestore"
+	m "github.com/Ranadia/overengineered-calculator/model/model"
 )
 
 var (
@@ -13,8 +13,7 @@ var (
 	projectID string
 )
 
-type googleCloudHandler struct {
-}
+type GoogleCloudHandler struct{}
 
 func init() {
 	projectID = "overengineered-calculato-c695d"

@@ -1,9 +1,9 @@
 package main
 
-var (
-	clientAPI *ClientAPI
+import (
+	ca "github.com/Ranadia/overengineered-calculator/clientAPI/clientapi"
 )
 
 func main() {
-	clientAPI.ApiHandle()
+	ca.APIHandle()
 }
