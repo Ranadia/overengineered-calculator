@@ -1,4 +1,4 @@
-package main
+package clientapi
 
 import (
 	"context"
@@ -27,7 +27,7 @@ func (ca ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	data := ca.gch.getStaticData(ctx)
+	data := ca.gch.GetStaticData(ctx)
 
 	jsonData, err := json.Marshal(data)
 
@@ -54,13 +54,13 @@ func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 
 	switch typeOfCalculation {
 	case "plus":
-		result = ca.calculator.plus(fNumber, sNumber)
+		result = ca.calculator.Plus(fNumber, sNumber)
 	case "minus":
-		result = ca.calculator.minus(fNumber, sNumber)
+		result = ca.calculator.Minus(fNumber, sNumber)
 	case "multiply":
-		result = ca.calculator.multiply(fNumber, sNumber)
+		result = ca.calculator.Multiply(fNumber, sNumber)
 	case "divide":
-		result = ca.calculator.divide(fNumber, sNumber)
+		result = ca.calculator.Divide(fNumber, sNumber)
 	default:
 		w.Write([]byte(`{"message": "Type of calculation is unsupported. Please use either \"plus, minus, multiply, divide\""}`))
 		return
@@ -73,7 +73,7 @@ func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 		result,
 	}
 
-	ca.gch.postCalculation(ctx, calc)
+	ca.gch.PostCalculation(ctx, calc)
 
 	data := map[string]interface{}{
 		"result": result,
@@ -89,7 +89,7 @@ func (ca ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(jsonData))
 }
 
-func (ca *ClientAPI) apiHandle() {
+func (ca *ClientAPI) ApiHandle() {
 	fmt.Println("apiHandle evoked.")
 
 	r := mux.NewRouter()

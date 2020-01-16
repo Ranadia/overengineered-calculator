@@ -5,5 +5,5 @@ var (
 )
 
 func main() {
-	clientAPI.apiHandle()
+	clientAPI.ApiHandle()
 }

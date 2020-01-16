@@ -1,8 +1,9 @@
-package main
+package googlecloudhandler
 
 import (
 	"context"
 	"fmt"
+	m "model"
 
 	"cloud.google.com/go/firestore"
 )
@@ -27,7 +28,7 @@ func init() {
 	}
 }
 
-func (gch *googleCloudHandler) postCalculation(ctx context.Context, calc Calculation) {
+func (gch *googleCloudHandler) PostCalculation(ctx context.Context, calc m.Calculation) {
 	_, _, err := client.Collection(calc.typeOfCalculation).Add(ctx, map[string]interface{}{
 		"firstNumber":  calc.firstNumber,
 		"secondNUmber": calc.secondNumber,
@@ -40,7 +41,7 @@ func (gch *googleCloudHandler) postCalculation(ctx context.Context, calc Calcula
 	}
 }
 
-func (gch *googleCloudHandler) getStaticData(ctx context.Context) map[string]interface{} {
+func (gch *googleCloudHandler) GetStaticData(ctx context.Context) map[string]interface{} {
 	staticData, err := client.Collection("staticData").Doc("AppData").Get(ctx)
 
 	if err != nil {
@@ -52,7 +53,7 @@ func (gch *googleCloudHandler) getStaticData(ctx context.Context) map[string]int
 	return data
 }
 
-func (gch *googleCloudHandler) closeClient() {
+func (gch *googleCloudHandler) CloseClient() {
 	fmt.Println("Closing client")
 	client.Close()
 	fmt.Println("Client closed")
