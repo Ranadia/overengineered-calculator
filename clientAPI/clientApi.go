@@ -9,16 +9,15 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Ranadia/overengineered-calculator/calculator/calculator"
-	"github.com/Ranadia/overengineered-calculator/googleCloudHandler/googlecloudhandler"
-	"github.com/Ranadia/overengineered-calculator/model/model"
+	"github.com/Ranadia/overengineered-calculator/calculator"
+	googlecloudhandler "github.com/Ranadia/overengineered-calculator/googleCloudHandler"
+	"github.com/Ranadia/overengineered-calculator/model"
 	"github.com/gorilla/mux"
 )
 
 type ClientAPI struct {
 	calculator         *calculator.Calculator
 	googleCloudHandler *googlecloudhandler.GoogleCloudHandler
-	calculation        model.Calculation
 }
 
 func init() {
@@ -70,7 +69,7 @@ func (ca *ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	calc := ca.calculation{
+	calc := model.Calculation{
 		typeOfCalculation,
 		fNumber,
 		sNumber,

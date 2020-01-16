@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"cloud.google.com/go/firestore"
-	m "github.com/Ranadia/overengineered-calculator/model/model"
+	"github.com/Ranadia/overengineered-calculator/model"
 )
 
 var (
@@ -27,11 +27,11 @@ func init() {
 	}
 }
 
-func (gch *googleCloudHandler) PostCalculation(ctx context.Context, calc m.Calculation) {
-	_, _, err := client.Collection(calc.typeOfCalculation).Add(ctx, map[string]interface{}{
-		"firstNumber":  calc.firstNumber,
-		"secondNUmber": calc.secondNumber,
-		"result":       calc.result,
+func (gch *GoogleCloudHandler) PostCalculation(ctx context.Context, calc model.Calculation) {
+	_, _, err := client.Collection(calc.TypeOfCalculation).Add(ctx, map[string]interface{}{
+		"firstNumber":  calc.FirstNumber,
+		"secondNUmber": calc.SecondNumber,
+		"result":       calc.Result,
 	})
 
 	if err != nil {
@@ -40,7 +40,7 @@ func (gch *googleCloudHandler) PostCalculation(ctx context.Context, calc m.Calcu
 	}
 }
 
-func (gch *googleCloudHandler) GetStaticData(ctx context.Context) map[string]interface{} {
+func (gch *GoogleCloudHandler) GetStaticData(ctx context.Context) map[string]interface{} {
 	staticData, err := client.Collection("staticData").Doc("AppData").Get(ctx)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (gch *googleCloudHandler) GetStaticData(ctx context.Context) map[string]int
 	return data
 }
 
-func (gch *googleCloudHandler) CloseClient() {
+func (gch *GoogleCloudHandler) CloseClient() {
 	fmt.Println("Closing client")
 	client.Close()
 	fmt.Println("Client closed")
