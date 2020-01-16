@@ -35,7 +35,7 @@ func (gch *googleCloudHandler) PostCalculation(ctx context.Context, calc m.Calcu
 	})
 
 	if err != nil {
-		fmt.Println("error with calculationDoc.Set()")
+		fmt.Println("error with Collection.Add")
 		fmt.Println(err)
 	}
 }
