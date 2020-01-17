@@ -16,12 +16,13 @@ import (
 )
 
 type ClientAPI struct {
-	calculator         *calculator.Calculator
-	googleCloudHandler *googlecloudhandler.GoogleCloudHandler
+	calculator         calculator.Calculator
+	googleCloudHandler googlecloudhandler.GoogleCloudHandler
 }
 
 func init() {
 	fmt.Println("HttpServer starting up.")
+
 }
 
 func (ca *ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
