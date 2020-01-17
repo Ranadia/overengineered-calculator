@@ -25,10 +25,18 @@ func init() {
 
 }
 
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers", "*")
+}
+
 func (ca *ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 
+	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
+
 	w.WriteHeader(http.StatusCreated)
 
 	data := ca.googleCloudHandler.GetStaticData(ctx)
@@ -43,8 +51,10 @@ func (ca *ClientAPI) retrieveStaticData(w http.ResponseWriter, r *http.Request) 
 }
 
 func (ca *ClientAPI) receiveCalculation(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	ctx := context.Background()
+
+	enableCors(&w)
+	w.Header().Set("Content-Type", "application/json")
 
 	body, _ := ioutil.ReadAll(r.Body)
 	keyVal := make(map[string]string)
